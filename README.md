@@ -10,6 +10,8 @@ Este es un cascarón de proyecto, siéntete libre de usarlo para tus proyectos.
 2. Instalar dependencias `npm install`
 3. Correr en desarrollo `npm run dev`
 
+NOTA: En el navegador, en la pestaña de React Developer Tools, seleccionar el engranage y hacer check en Highlight updates when components render.
+
 ### Secciones
 
 #### Bases de Zustand
