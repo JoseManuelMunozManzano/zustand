@@ -6,6 +6,8 @@ interface BearState {
   pandaBears: number;
 
   increaseBlackBears: (by: number) => void;
+  increasePolarBears: (by: number) => void;
+  increasePandaBears: (by: number) => void;
 }
 
 // Definición de Store
@@ -14,12 +16,14 @@ interface BearState {
 // Como estamos en TypeScript en vez de create((set) => {...}) hacemos create()((set) => {...})
 // para invocar (con los primeros parénteresis) el create. Esto regresa una función que invocamos
 // (con los segundos paréntesis que contiene el set y lo demás)
-export const userBearsStore = create<BearState>()((set) => ({
+export const useBearsStore = create<BearState>()((set) => ({
   blackBears: 10,
   polarBears: 5,
   pandaBears: 1,
 
   increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
+  increasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
+  increasePandaBears: (by: number) => set((state) => ({ pandaBears: state.pandaBears + by })),
 }));
 
 // Ventaja de Zustand sobre Redux o cualquier otro gestor de estados basado en React.

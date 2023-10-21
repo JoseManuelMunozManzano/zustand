@@ -1,5 +1,6 @@
+import { useShallow } from 'zustand/react/shallow';
 import { WhiteCard } from '../../components';
-import { userBearsStore } from '../../stores/bears/bears.store';
+import { useBearsStore } from '../../stores/bears/bears.store';
 
 export const BearPage = () => {
   return (
@@ -11,25 +12,9 @@ export const BearPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
         <BlackBears />
 
-        <WhiteCard centered>
-          <h2>Osos Polares</h2>
+        <PolarBears />
 
-          <div className="flex flex-col md:flex-row">
-            <button> +1</button>
-            <span className="text-3xl mx-2 lg:mx-10"> 0 </span>
-            <button>-1</button>
-          </div>
-        </WhiteCard>
-
-        <WhiteCard centered>
-          <h2>Osos Pandas</h2>
-
-          <div className="flex flex-col md:flex-row">
-            <button> +1</button>
-            <span className="text-3xl mx-2 lg:mx-10"> 0 </span>
-            <button>-1</button>
-          </div>
-        </WhiteCard>
+        <PandaBears />
       </div>
     </>
   );
@@ -43,8 +28,18 @@ export const BlackBears = () => {
   // Consumir el store.
   // Notar que NO hacemos desestructuración.
   // Se puede hacer pero la documentación NO lo recomienda.
-  const blackBears = userBearsStore((state) => state.blackBears);
-  const increaseBlackBears = userBearsStore((state) => state.increaseBlackBears);
+  const blackBears = useBearsStore((state) => state.blackBears);
+  const increaseBlackBears = useBearsStore((state) => state.increaseBlackBears);
+
+  // Si hacemos la desestructuración veremos que funciona pero tiene un problema:
+  // useBearsStore((state) => state) usa TODO el estado por lo que, cuando
+  // cambia el estado de otro oso se renderiza también el BlackBear.
+  //
+  // const { blackBears, increaseBlackBears } = useBearsStore((state) => state);
+  //
+  // La desestructuración sigue siendo posible con la técnica de useShallow, pero
+  // no merece la pena.
+  // useShallow lo veremos más adelante.
 
   return (
     <WhiteCard centered>
@@ -54,6 +49,40 @@ export const BlackBears = () => {
         <button onClick={() => increaseBlackBears(+1)}> +1 </button>
         <span className="text-3xl mx-2 lg:mx-10"> {blackBears} </span>
         <button onClick={() => increaseBlackBears(-1)}> -1 </button>
+      </div>
+    </WhiteCard>
+  );
+};
+
+export const PolarBears = () => {
+  const polarBears = useBearsStore((state) => state.polarBears);
+  const increasePolarBears = useBearsStore((state) => state.increasePolarBears);
+
+  return (
+    <WhiteCard centered>
+      <h2>Osos Polares</h2>
+
+      <div className="flex flex-col md:flex-row">
+        <button onClick={() => increasePolarBears(+1)}> +1 </button>
+        <span className="text-3xl mx-2 lg:mx-10"> {polarBears} </span>
+        <button onClick={() => increasePolarBears(-1)}> -1 </button>
+      </div>
+    </WhiteCard>
+  );
+};
+
+export const PandaBears = () => {
+  const pandaBears = useBearsStore((state) => state.pandaBears);
+  const increasePandaBears = useBearsStore((state) => state.increasePandaBears);
+
+  return (
+    <WhiteCard centered>
+      <h2>Osos Pandas</h2>
+
+      <div className="flex flex-col md:flex-row">
+        <button onClick={() => increasePandaBears(+1)}> +1 </button>
+        <span className="text-3xl mx-2 lg:mx-10"> {pandaBears} </span>
+        <button onClick={() => increasePandaBears(-1)}> -1 </button>
       </div>
     </WhiteCard>
   );
