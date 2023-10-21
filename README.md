@@ -14,7 +14,12 @@ Este es un cascarón de proyecto, siéntete libre de usarlo para tus proyectos.
 
 #### Bases de Zustand
 
+`https://docs.pmnd.rs/zustand/getting-started/introduction`
+
 - Instalaciones
+
+  `npm install zustand`
+
 - Configuraciones
 - Propiedades computadas
 - Objetos anidados
