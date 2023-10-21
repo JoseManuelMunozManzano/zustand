@@ -1,13 +1,24 @@
 import { create } from 'zustand';
 
+interface Bear {
+  id: number;
+  name: string;
+}
+
 interface BearState {
   blackBears: number;
   polarBears: number;
   pandaBears: number;
 
+  // Trabajando con objetos anidados
+  bears: Bear[];
+
   increaseBlackBears: (by: number) => void;
   increasePolarBears: (by: number) => void;
   increasePandaBears: (by: number) => void;
+
+  // No va a hacer realmente nada, pero va a ser un cambio en el estado.
+  doNothing: () => void;
 }
 
 // Definición de Store
@@ -21,9 +32,15 @@ export const useBearsStore = create<BearState>()((set) => ({
   polarBears: 5,
   pandaBears: 1,
 
+  bears: [{ id: 1, name: 'Oso #1' }],
+
   increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
   increasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
   increasePandaBears: (by: number) => set((state) => ({ pandaBears: state.pandaBears + by })),
+
+  // Crea un nuevo arreglo en memoria con los mismos valores que hay actualmente.
+  // Al final, esto es un nuevo estado, pero que es igual al anterior.
+  doNothing: () => set((state) => ({ bears: [...state.bears] })),
 }));
 
 // Ventaja de Zustand sobre Redux o cualquier otro gestor de estados basado en React.

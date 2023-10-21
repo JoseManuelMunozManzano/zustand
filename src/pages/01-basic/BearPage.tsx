@@ -1,3 +1,4 @@
+import { useShallow } from 'zustand/react/shallow';
 import { WhiteCard } from '../../components';
 import { useBearsStore } from '../../stores/bears/bears.store';
 
@@ -14,6 +15,8 @@ export const BearPage = () => {
         <PolarBears />
 
         <PandaBears />
+
+        <BearsDisplay />
       </div>
     </>
   );
@@ -83,6 +86,26 @@ export const PandaBears = () => {
         <span className="text-3xl mx-2 lg:mx-10"> {pandaBears} </span>
         <button onClick={() => increasePandaBears(-1)}> -1 </button>
       </div>
+    </WhiteCard>
+  );
+};
+
+export const BearsDisplay = () => {
+  // doNothing crea un nuevo arreglo en memoria con la misma
+  // información de bears, es decir, no cambia el estado.
+  //
+  // useShallow analiza las propiedades del objeto bears y confirmará si realmente
+  // cambiaron. Si cambian se renderiza el componente. Si no cambiaron no lanza
+  // el re-render.
+  const bears = useBearsStore(useShallow((state) => state.bears));
+  const doNothing = useBearsStore((state) => state.doNothing);
+
+  return (
+    <WhiteCard>
+      <h1>Osos</h1>
+      <button onClick={doNothing}>Do Nothing</button>
+
+      <pre>{JSON.stringify(bears, null, 2)}</pre>
     </WhiteCard>
   );
 };
