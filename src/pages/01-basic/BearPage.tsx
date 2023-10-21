@@ -1,6 +1,13 @@
 import { WhiteCard } from '../../components';
+import { userBearsStore } from '../../stores/bears/bears.store';
 
 export const BearPage = () => {
+  // Consumir el store.
+  // Notar que NO hacemos desestructuración.
+  // Se puede hacer pero la documentación NO lo recomienda.
+  const blackBears = userBearsStore((state) => state.blackBears);
+  const increaseBlackBears = userBearsStore((state) => state.increaseBlackBears);
+
   return (
     <>
       <h1>Contador de Osos</h1>
@@ -8,16 +15,14 @@ export const BearPage = () => {
       <hr />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-
         <WhiteCard centered>
           <h2>Osos Negros</h2>
 
           <div className="flex flex-col md:flex-row">
-            <button> +1</button>
-            <span className="text-3xl mx-2 lg:mx-10"> 0 </span>
-            <button>-1</button>
+            <button onClick={() => increaseBlackBears(+1)}> +1 </button>
+            <span className="text-3xl mx-2 lg:mx-10"> {blackBears} </span>
+            <button onClick={() => increaseBlackBears(-1)}> -1 </button>
           </div>
-
         </WhiteCard>
 
         <WhiteCard centered>
@@ -27,9 +32,7 @@ export const BearPage = () => {
             <button> +1</button>
             <span className="text-3xl mx-2 lg:mx-10"> 0 </span>
             <button>-1</button>
-
           </div>
-
         </WhiteCard>
 
         <WhiteCard centered>
@@ -40,14 +43,8 @@ export const BearPage = () => {
             <span className="text-3xl mx-2 lg:mx-10"> 0 </span>
             <button>-1</button>
           </div>
-
         </WhiteCard>
-
-
-
-
       </div>
-
     </>
   );
 };
