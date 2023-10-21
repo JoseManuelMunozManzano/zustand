@@ -19,6 +19,10 @@ interface BearState {
 
   // No va a hacer realmente nada, pero va a ser un cambio en el estado.
   doNothing: () => void;
+
+  // Métodos con objetos anidados
+  addBear: () => void;
+  clearBears: () => void;
 }
 
 // Definición de Store
@@ -41,6 +45,12 @@ export const useBearsStore = create<BearState>()((set) => ({
   // Crea un nuevo arreglo en memoria con los mismos valores que hay actualmente.
   // Al final, esto es un nuevo estado, pero que es igual al anterior.
   doNothing: () => set((state) => ({ bears: [...state.bears] })),
+
+  addBear: () =>
+    set((state) => ({
+      bears: [...state.bears, { id: state.bears.length + 1, name: `Oso #${state.bears.length + 1}` }],
+    })),
+  clearBears: () => set({ bears: [] }),
 }));
 
 // Ventaja de Zustand sobre Redux o cualquier otro gestor de estados basado en React.
