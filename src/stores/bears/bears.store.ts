@@ -13,6 +13,11 @@ interface BearState {
   // Trabajando con objetos anidados
   bears: Bear[];
 
+  // Propiedades computadas dentro de un objeto JavaScript.
+  computed: {
+    totalBears: number;
+  };
+
   increaseBlackBears: (by: number) => void;
   increasePolarBears: (by: number) => void;
   increasePandaBears: (by: number) => void;
@@ -31,12 +36,24 @@ interface BearState {
 // Como estamos en TypeScript en vez de create((set) => {...}) hacemos create()((set) => {...})
 // para invocar (con los primeros parénteresis) el create. Esto regresa una función que invocamos
 // (con los segundos paréntesis que contiene el set y lo demás)
-export const useBearsStore = create<BearState>()((set) => ({
+//
+// Se indica como parámetro la función get, para tener acceso al state dentro de mi función.
+export const useBearsStore = create<BearState>()((set, get) => ({
   blackBears: 10,
   polarBears: 5,
   pandaBears: 1,
 
   bears: [{ id: 1, name: 'Oso #1' }],
+
+  // NOTA: No hay nada en la documentación de Zustand sobre propiedades computadas.
+  //
+  // Para computar el número de osos total vamos a hacer uso de la propiedad get
+  // de los objetos de JavaScript. Este get NO es la función get del state! Son distintos.
+  computed: {
+    get totalBears(): number {
+      return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
+    },
+  },
 
   increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
   increasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
