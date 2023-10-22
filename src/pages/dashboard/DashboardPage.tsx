@@ -12,7 +12,11 @@ export const Dashboard = () => {
   // Yo no quiero computar aquí el número de osos. Lo quiero hacer en mi store,
   // porque es posible que el día de mañana se tenga que usar en otro sitio.
   // Para ello creamos propiedades computadas en el store y aquí las usamos.
-  const totalBears = useBearsStore((state) => state.computed.totalBears);
+  //
+  //const totalBears = useBearsStore((state) => state.computed.totalBears);
+  //
+  // Ahora totalBears es una función normal que regresa un number
+  const totalBears = useBearsStore((state) => state.totalBears);
   const firstName = usePersonStore((state) => state.firstName);
 
   return (
@@ -25,7 +29,8 @@ export const Dashboard = () => {
         <WhiteCard centered>
           <IoPawOutline size={50} className="text-indigo-600" />
           <h2>Osos</h2>
-          <p>{totalBears}</p>
+          {/* <p>{totalBears}</p> */}
+          <p>{totalBears()}</p>
         </WhiteCard>
 
         <WhiteCard centered>

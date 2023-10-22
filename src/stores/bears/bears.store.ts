@@ -15,9 +15,16 @@ interface BearState {
   bears: Bear[];
 
   // Propiedades computadas dentro de un objeto JavaScript.
-  computed: {
-    totalBears: number;
-  };
+  //
+  // Solución Consideración 2:
+  // En vez de tener así la propiedad computada, lo mejor es mandarlo llamar como
+  // a cualquier otro método.
+  //
+  // computed: {
+  //   totalBears: number;
+  // };
+
+  totalBears: () => number;
 
   increaseBlackBears: (by: number) => void;
   increasePolarBears: (by: number) => void;
@@ -50,17 +57,24 @@ export const useBearsStore = create<BearState>()(
 
       bears: [{ id: 1, name: 'Oso #1' }],
 
+      // Para solucionar la Consideración 2 eliminamos todo esto. Ahora es una
+      // función normal.
+      //
       // NOTA: No hay nada en la documentación de Zustand sobre propiedades computadas.
       //
       // Para computar el número de osos total vamos a hacer uso de la propiedad get
       // de los objetos de JavaScript. Este get NO es la función get del state! Son distintos.
-      computed: {
-        // Consideración 2
-        // Este getter no se va a llamar de la manera esperada si envolvemos este store con un
-        // middleware (al refrescar y luego pulsar botones no actualiza los valores del store)
-        get totalBears(): number {
-          return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
-        },
+      // computed: {
+      // Consideración 2
+      // Este getter no se va a llamar de la manera esperada si envolvemos este store con un
+      // middleware (al refrescar y luego pulsar botones no actualiza los valores del store)
+      // get totalBears(): number {
+      //  return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
+      //},
+      //},
+
+      totalBears: () => {
+        return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
       },
 
       increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
