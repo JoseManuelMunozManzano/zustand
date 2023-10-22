@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface Bear {
   id: number;
@@ -38,37 +39,47 @@ interface BearState {
 // (con los segundos paréntesis que contiene el set y lo demás)
 //
 // Se indica como parámetro la función get, para tener acceso al state dentro de mi función.
-export const useBearsStore = create<BearState>()((set, get) => ({
-  blackBears: 10,
-  polarBears: 5,
-  pandaBears: 1,
+//
+// Incluimos middleware Persist para ver el problema con el getter (la consideración 2)
+export const useBearsStore = create<BearState>()(
+  persist(
+    (set, get) => ({
+      blackBears: 10,
+      polarBears: 5,
+      pandaBears: 1,
 
-  bears: [{ id: 1, name: 'Oso #1' }],
+      bears: [{ id: 1, name: 'Oso #1' }],
 
-  // NOTA: No hay nada en la documentación de Zustand sobre propiedades computadas.
-  //
-  // Para computar el número de osos total vamos a hacer uso de la propiedad get
-  // de los objetos de JavaScript. Este get NO es la función get del state! Son distintos.
-  computed: {
-    get totalBears(): number {
-      return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
-    },
-  },
+      // NOTA: No hay nada en la documentación de Zustand sobre propiedades computadas.
+      //
+      // Para computar el número de osos total vamos a hacer uso de la propiedad get
+      // de los objetos de JavaScript. Este get NO es la función get del state! Son distintos.
+      computed: {
+        // Consideración 2
+        // Este getter no se va a llamar de la manera esperada si envolvemos este store con un
+        // middleware (al refrescar y luego pulsar botones no actualiza los valores del store)
+        get totalBears(): number {
+          return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
+        },
+      },
 
-  increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
-  increasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
-  increasePandaBears: (by: number) => set((state) => ({ pandaBears: state.pandaBears + by })),
+      increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
+      increasePolarBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
+      increasePandaBears: (by: number) => set((state) => ({ pandaBears: state.pandaBears + by })),
 
-  // Crea un nuevo arreglo en memoria con los mismos valores que hay actualmente.
-  // Al final, esto es un nuevo estado, pero que es igual al anterior.
-  doNothing: () => set((state) => ({ bears: [...state.bears] })),
+      // Crea un nuevo arreglo en memoria con los mismos valores que hay actualmente.
+      // Al final, esto es un nuevo estado, pero que es igual al anterior.
+      doNothing: () => set((state) => ({ bears: [...state.bears] })),
 
-  addBear: () =>
-    set((state) => ({
-      bears: [...state.bears, { id: state.bears.length + 1, name: `Oso #${state.bears.length + 1}` }],
-    })),
-  clearBears: () => set({ bears: [] }),
-}));
+      addBear: () =>
+        set((state) => ({
+          bears: [...state.bears, { id: state.bears.length + 1, name: `Oso #${state.bears.length + 1}` }],
+        })),
+      clearBears: () => set({ bears: [] }),
+    }),
+    { name: 'bears-store' }
+  )
+);
 
 // Ventaja de Zustand sobre Redux o cualquier otro gestor de estados basado en React.
 // No hay que ir a Root.tsx y envolverlo con un Provider.

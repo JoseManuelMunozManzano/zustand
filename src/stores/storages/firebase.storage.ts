@@ -23,12 +23,21 @@ const storageApi: StateStorage = {
     }
   },
   setItem: async function (name: string, value: string): Promise<void> {
-    const data = await fetch(`${firebaseUrl}/${name}.json`, {
+    // Consideración 1:
+    //
+    // Aquí tenemos un problema llamado race condition (condición de carrera)
+    // Me refiero a que cada vez que pulsemos una tecla se está llamando a este setItem para escribir
+    // en Firebase. No lo notamos porque Firebase en muy rápido, pero podría pasar que una petición
+    // que vaya después de una primera petición realmente se escriba, y la primera no llega a escribirse.
+    //
+    // La condición de carrera se evita cuando se cancela la petición anterior. Eso se puede
+    // hacer con Axios, al hacer la petición, indicando una señal con un abort controller.
+    // Cuando se lanza una segunda petición, lo que hacemos es cancelar la primera petición.
+    // Ver https://axios-http.com/docs/cancellation
+    await fetch(`${firebaseUrl}/${name}.json`, {
       method: 'PUT',
       body: value, // O body: JSON.stringify(value) para grabar un string en Firebase
     }).then((res) => res.json());
-
-    console.log(data);
   },
 
   removeItem: function (name: string): void | Promise<void> {
