@@ -3,7 +3,7 @@
 import { type StateCreator, create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-import { logger } from '../middlewares/logger.middleware';
+//import { logger } from '../middlewares/logger.middleware';
 
 //import { customSessionStorage } from '../storages/session-storage.storage';
 import { firebaseStorage } from '../storages/firebase.storage';
@@ -64,13 +64,14 @@ const storeApi: StateCreator<PersonState & Actions, [['zustand/devtools', never]
 export const usePersonStore = create<PersonState & Actions>()(
   // Usando nuestro custom middleware. La información pasará a los siguientes middlewares
   // y al final llega a nuestro store.
-  logger(
-    devtools(
-      persist(storeApi, {
-        name: 'person-storage',
-        storage: firebaseStorage,
-        //storage: customSessionStorage
-      })
-    )
+  // Lo quitamos para que no moleste.
+  // logger(
+  devtools(
+    persist(storeApi, {
+      name: 'person-storage',
+      storage: firebaseStorage,
+      //storage: customSessionStorage
+    })
   )
+  // )
 );
