@@ -3,7 +3,8 @@
 import { type StateCreator, create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { customSessionStorage } from '../storages/session-storage.storage';
+//import { customSessionStorage } from '../storages/session-storage.storage';
+import { firebaseStorage } from '../storages/firebase.storage';
 
 // El state puede separse en piezas del state (propiedades y objetos) y métodos.
 // Lo hacemos aquí, pero esto tiene mucho más sentido con los Zustand Slices
@@ -43,5 +44,9 @@ const storeApi: StateCreator<PersonState & Actions> = (set) => ({
 // en el Session Storage en vez del Local Storage.
 // Para ello asignaremos en la propiedad storage el objeto customSessionStorage.
 export const usePersonStore = create<PersonState & Actions>()(
-  persist(storeApi, { name: 'person-storage', storage: customSessionStorage })
+  persist(storeApi, {
+    name: 'person-storage',
+    storage: firebaseStorage,
+    //storage: customSessionStorage
+  })
 );
