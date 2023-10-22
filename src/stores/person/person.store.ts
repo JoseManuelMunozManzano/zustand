@@ -3,6 +3,8 @@
 import { type StateCreator, create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
+import { logger } from '../middlewares/logger.middleware';
+
 //import { customSessionStorage } from '../storages/session-storage.storage';
 import { firebaseStorage } from '../storages/firebase.storage';
 
@@ -60,11 +62,15 @@ const storeApi: StateCreator<PersonState & Actions, [['zustand/devtools', never]
 // Una vez añadido este middleware, en el navegador Chrome podemos ir a la pestaña Redux y ver
 // nuestro state.
 export const usePersonStore = create<PersonState & Actions>()(
-  devtools(
-    persist(storeApi, {
-      name: 'person-storage',
-      storage: firebaseStorage,
-      //storage: customSessionStorage
-    })
+  // Usando nuestro custom middleware. La información pasará a los siguientes middlewares
+  // y al final llega a nuestro store.
+  logger(
+    devtools(
+      persist(storeApi, {
+        name: 'person-storage',
+        storage: firebaseStorage,
+        //storage: customSessionStorage
+      })
+    )
   )
 );

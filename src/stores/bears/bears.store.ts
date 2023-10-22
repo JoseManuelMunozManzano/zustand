@@ -50,7 +50,9 @@ interface BearState {
 // Incluimos middleware Persist para ver el problema con el getter (la consideración 2)
 export const useBearsStore = create<BearState>()(
   persist(
-    (set, get) => ({
+    // Para ver que nuestro custom middleware devuelve en el return el set, get y store
+    // añadimos el store aquí, pero no hace falta y en Producción lo podemos quitar.
+    (set, get, store) => ({
       blackBears: 10,
       polarBears: 5,
       pandaBears: 1,
@@ -74,6 +76,7 @@ export const useBearsStore = create<BearState>()(
       //},
 
       totalBears: () => {
+        console.log(store); // Solo por usarlo en algún sitio. No hace falta.
         return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
       },
 

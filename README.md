@@ -33,15 +33,15 @@ NOTA: En el navegador, en la pestaña de React Developer Tools, seleccionar el e
 
 `https://docs.pmnd.rs/zustand/guides/typescript#using-middlewares`
 
-`https://firebase.google.com/`
-
 En esta sección vamos a trabajar con middlewares o funciones adicionales que expanden el comportamiento por defecto de Zustand. Puntualmente veremos:
 
 - Persist Middlewares
 - createJSONStore
 - Guardar automáticamente en session storage
 - Guardar automáticamente en Firebase
+  - `https://firebase.google.com/`
 - Crear un storage personalizado
 - Diferentes interfaces de Zustand
 - Custom Middleware
+  - `https://docs.pmnd.rs/zustand/guides/typescript#common-recipes`
 - Redux DevTools y acciones
