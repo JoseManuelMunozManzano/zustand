@@ -28,3 +28,16 @@ NOTA: En el navegador, en la pestaña de React Developer Tools, seleccionar el e
 - Actualizaciones de estado
 - Configuraciones con TypeScript
 - useShallow
+
+#### Middlewares de Zustand
+
+En esta sección vamos a trabajar con middlewares o funciones adicionales que expanden el comportamiento por defecto de Zustand. Puntualmente veremos:
+
+- Persist Middlewares
+- createJSONStore
+- Guardar automáticamente en session storage
+- Guardar automáticamente en Firebase
+- Crear un storage personalizado
+- Diferentes interfaces de Zustand
+- Custom Middleware
+- Redux DevTools y acciones
