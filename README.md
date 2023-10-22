@@ -31,6 +31,8 @@ NOTA: En el navegador, en la pestaña de React Developer Tools, seleccionar el e
 
 #### Middlewares de Zustand
 
+`https://docs.pmnd.rs/zustand/guides/typescript#using-middlewares`
+
 En esta sección vamos a trabajar con middlewares o funciones adicionales que expanden el comportamiento por defecto de Zustand. Puntualmente veremos:
 
 - Persist Middlewares
