@@ -1,7 +1,7 @@
 // Se indica type para que cuando se construya la aplicación no importe nada, ya que
 // solo lo vamos a usar como una interface para TypeScript.
 import { type StateCreator, create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 //import { customSessionStorage } from '../storages/session-storage.storage';
 import { firebaseStorage } from '../storages/firebase.storage';
@@ -20,7 +20,7 @@ interface Actions {
 }
 
 // Hemos sacado el state del interior de los middlewares para que sea más legible y mantenible.
-const storeApi: StateCreator<PersonState & Actions> = (set) => ({
+const storeApi: StateCreator<PersonState & Actions, [['zustand/devtools', never]]> = (set) => ({
   firstName: '',
   lastName: '',
 
@@ -28,8 +28,17 @@ const storeApi: StateCreator<PersonState & Actions> = (set) => ({
   // setFirstName: (value: string) => set({ firstName: value }),
 
   // Pero para explicar más fácilmente una cosa de los middlewares lo vamos a dejar así.
-  setFirstName: (value: string) => set((state) => ({ firstName: value })),
-  setLastName: (value: string) => set((state) => ({ lastName: value })),
+  //
+  // Dejamos el state porque en las Redux DevTools aparece anonymous.
+  // Zustand no sabe el nombre de la acción que cambia el state, así que tenemos que indicarlo nosotros.
+  // Indicamos el replace (segundo argumento), que dice a Zustand que reemplace el estado anterior con
+  // el valor false.
+  // Ese valor es el por defecto, pero tenemos que indicarlo para poder acceder al tercer argumento, que
+  // es el nombre de mi acción.
+  // Para que no de un error, se ha añadido al genérico el tipado [['zustand/devtools', never]]
+  // Una vez añadido todo esto, ya quitamos el state porque no lo estamos usando.
+  setFirstName: (value: string) => set({ firstName: value }, false, 'setFirstName'),
+  setLastName: (value: string) => set({ lastName: value }, false, 'setLastName'),
 });
 
 // Esta parte queda ahora solo para puros middlewares.
@@ -43,10 +52,19 @@ const storeApi: StateCreator<PersonState & Actions> = (set) => ({
 // Usando nuestro Persist Middleware vamos crear un custom Storage para guardar nuestra información
 // en el Session Storage en vez del Local Storage.
 // Para ello asignaremos en la propiedad storage el objeto customSessionStorage.
+//
+// Esto es completamente opcional.
+// Aplicamos ahora el middleware de Redux DevTools. Se pueden usar porque Zustand trabaja muy
+// parecido a como lo hace Redux.
+// NOTA: Se pueden apilar 3 o 4 middlewares sin problemas. Más de eso, es mejor sacarlas fuera.
+// Una vez añadido este middleware, en el navegador Chrome podemos ir a la pestaña Redux y ver
+// nuestro state.
 export const usePersonStore = create<PersonState & Actions>()(
-  persist(storeApi, {
-    name: 'person-storage',
-    storage: firebaseStorage,
-    //storage: customSessionStorage
-  })
+  devtools(
+    persist(storeApi, {
+      name: 'person-storage',
+      storage: firebaseStorage,
+      //storage: customSessionStorage
+    })
+  )
 );
