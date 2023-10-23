@@ -6,7 +6,7 @@ import { devtools, persist } from 'zustand/middleware';
 //import { logger } from '../middlewares/logger.middleware';
 
 //import { customSessionStorage } from '../storages/session-storage.storage';
-import { firebaseStorage } from '../storages/firebase.storage';
+// import { firebaseStorage } from '../storages/firebase.storage';
 
 // El state puede separse en piezas del state (propiedades y objetos) y métodos.
 // Lo hacemos aquí, pero esto tiene mucho más sentido con los Zustand Slices
