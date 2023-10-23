@@ -45,3 +45,16 @@ En esta sección vamos a trabajar con middlewares o funciones adicionales que ex
 - Custom Middleware
   - `https://docs.pmnd.rs/zustand/guides/typescript#common-recipes`
 - Redux DevTools y acciones
+
+#### Tareas - Drag & Drop - Inmutabilidad con Immer
+
+En esta sección aprenderemos a trabajar con objetos anidados dentro de nuestro store, con el objetivo de apreciar claramente el beneficio de utilizar la función produce() o, mejor aún, el middleware immer, para poder mutar el estado y generar uno nuevo basado en esa mutación.
+Puntualmente veremos:
+
+- Drag & Drop (sin dependencias)
+- Uso de Store con objetos anidados
+- Middlewares
+- Funciones adicionales
+- UUID
+- Mutaciones vs Clonaciones
+- Tipado en TypeScript
