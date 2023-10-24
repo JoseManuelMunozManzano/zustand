@@ -1,8 +1,11 @@
 import { DragEvent } from 'react';
 import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from 'react-icons/io5';
+import classNames from 'classnames';
+
 import { SingleTask } from './SingleTask';
 
 import type { Task, TaskStatus } from '../../interfaces';
+import { useTaskStore } from '../../stores';
 
 interface Props {
   title: string;
@@ -11,6 +14,9 @@ interface Props {
 }
 
 export const JiraTasks = ({ title, value, tasks }: Props) => {
+  // Para convertir un valor no booleano a booleano se usa !!
+  const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+
   const handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
     // Se indica preventDefault para que se pueda ejecutar el evento onDrop
     ev.preventDefault();
@@ -33,7 +39,11 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]"
+      // Utilizando el paquete classnames agregaremos las clases border-blue-500 border-dotted si isDragging está a true
+      className={classNames(
+        '!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]',
+        { 'border-blue-500 border-dotted': isDragging }
+      )}
     >
       {/* Task Header */}
       <div className="relative flex flex-row justify-between">
