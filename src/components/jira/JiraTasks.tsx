@@ -1,4 +1,4 @@
-import { DragEvent } from 'react';
+import { DragEvent, useState } from 'react';
 import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from 'react-icons/io5';
 import classNames from 'classnames';
 
@@ -16,22 +16,23 @@ interface Props {
 export const JiraTasks = ({ title, value, tasks }: Props) => {
   // Para convertir un valor no booleano a booleano se usa !!
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+  const [onDragOver, setOnDragOver] = useState(false);
 
   const handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
     // Se indica preventDefault para que se pueda ejecutar el evento onDrop
     ev.preventDefault();
-    console.log('onDragOver');
+    setOnDragOver(true);
   };
 
   const handleDragLeave = (ev: DragEvent<HTMLDivElement>) => {
     // Se indica preventDefault para que se pueda ejecutar el evento onDrop
     ev.preventDefault();
-    console.log('onDragLeave');
+    setOnDragOver(false);
   };
 
   const handleDrop = (ev: DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
-    console.log('onDrop', value);
+    setOnDragOver(false);
   };
 
   return (
@@ -42,7 +43,10 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
       // Utilizando el paquete classnames agregaremos las clases border-blue-500 border-dotted si isDragging está a true
       className={classNames(
         '!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]',
-        { 'border-blue-500 border-dotted': isDragging }
+        {
+          'border-blue-500 border-dotted': isDragging,
+          'border-green-500 border-dotted': isDragging && onDragOver,
+        }
       )}
     >
       {/* Task Header */}
