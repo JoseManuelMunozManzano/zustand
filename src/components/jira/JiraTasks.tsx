@@ -16,8 +16,13 @@ interface Props {
 export const JiraTasks = ({ title, value, tasks }: Props) => {
   // Para convertir un valor no booleano a booleano se usa !!
   const isDragging = useTaskStore((state) => !!state.draggingTaskId);
-  const changeTaskStatus = useTaskStore((state) => state.changeTaskStatus);
-  const draggingTaskId = useTaskStore((state) => state.draggingTaskId);
+
+  // const changeTaskStatus = useTaskStore((state) => state.changeTaskStatus);
+  // const draggingTaskId = useTaskStore((state) => state.draggingTaskId);
+  //
+  // Ya solo me hace falta el método onTaskDrop
+  const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
+
   const [onDragOver, setOnDragOver] = useState(false);
 
   const handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
@@ -35,7 +40,8 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
   const handleDrop = (ev: DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
     setOnDragOver(false);
-    changeTaskStatus(draggingTaskId!, value);
+    //changeTaskStatus(draggingTaskId!, value);
+    onTaskDrop(value);
   };
 
   return (

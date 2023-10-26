@@ -14,6 +14,10 @@ interface TaskState {
   setDraggingTaskId: (taskId: string) => void;
   removeDraggingTaskId: () => void;
   changeTaskStatus: (taskId: string, status: TaskStatus) => void;
+
+  // Este método sirve para que no queden los puntos azules una vez se haya hecho el drop.
+  // Ahora mismo no funciona el drop y quedan dichos puntos en el diseño.
+  onTaskDrop: (status: TaskStatus) => void;
 }
 
 const storeApi: StateCreator<TaskState> = (set, get) => ({
@@ -54,6 +58,18 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
         [taskId]: task,
       },
     }));
+  },
+
+  onTaskDrop: (status: TaskStatus) => {
+    // Ejemplo de método que es la combinación de otros (combinar métodos de store)
+    // La idea es combinar changeTaskStatus y removeDraggingTaskId
+    const taskId = get().draggingTaskId;
+
+    // Porque puede ser null
+    if (!taskId) return;
+
+    get().changeTaskStatus(taskId, status);
+    get().removeDraggingTaskId();
   },
 });
 
