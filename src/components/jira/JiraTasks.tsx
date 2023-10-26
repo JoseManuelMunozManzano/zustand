@@ -1,5 +1,5 @@
 import { DragEvent, useState } from 'react';
-import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from 'react-icons/io5';
+import { IoAddOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import classNames from 'classnames';
 
 import { SingleTask } from './SingleTask';
@@ -22,8 +22,13 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
   //
   // Ya solo me hace falta el método onTaskDrop
   const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
+  const addTask = useTaskStore((state) => state.addTask);
 
   const [onDragOver, setOnDragOver] = useState(false);
+
+  const handleAddTask = () => {
+    addTask('Nuevo Título', value);
+  };
 
   const handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
     // Se indica preventDefault para que se pueda ejecutar el evento onDrop
@@ -70,8 +75,8 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
           <h4 className="ml-4 text-xl font-bold text-navy-700">{title}</h4>
         </div>
 
-        <button>
-          <IoEllipsisHorizontalOutline />
+        <button onClick={handleAddTask}>
+          <IoAddOutline />
         </button>
       </div>
 

@@ -1,4 +1,8 @@
 import { StateCreator, create } from 'zustand';
+
+// Instalado uuid (npm i uuid) y sus tipos (npm i --save-dev @types/uuid)
+import { v4 as uuidv4 } from 'uuid';
+
 // De nuevo, indicamos type para que no importe ningún archivo físico
 import type { Task, TaskStatus } from '../../interfaces';
 import { devtools } from 'zustand/middleware';
@@ -9,6 +13,7 @@ interface TaskState {
   tasks: Record<string, Task>; // Igual a {[key: string]: Task},
 
   getTaskByStatus: (status: TaskStatus) => Task[];
+  addTask: (title: string, status: TaskStatus) => void;
 
   // Cuando estudiemos slices veremos como separar las tareas del drag & drop
   setDraggingTaskId: (taskId: string) => void;
@@ -33,6 +38,19 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   getTaskByStatus: (status: TaskStatus) => {
     const tasks = get().tasks;
     return Object.values(tasks).filter((task) => task.status === status);
+  },
+
+  addTask: (title: string, status: TaskStatus) => {
+    const newTask = { id: uuidv4(), title, status };
+
+    set((state) => ({
+      tasks: {
+        // De nuevo tenemos el problema de que se nos puede pasar esto y perderíamos todas las tareas.
+        ...state.tasks,
+        // Llaves cuadradas porque queremos poner la propiedad computada
+        [newTask.id]: newTask,
+      },
+    }));
   },
 
   setDraggingTaskId: (taskId: string) => {
