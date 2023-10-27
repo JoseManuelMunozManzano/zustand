@@ -62,3 +62,11 @@ Puntualmente veremos:
 - UUID
 - Mutaciones vs Clonaciones
 - Tipado en TypeScript
+
+#### Zustand Slices
+
+Esta sección tiene por objetivo que aprendamos el patrón "Slices" de Zustand para poder cortar un Store en pequeñas partes fácilmente mantenibles.
+
+El ejercicio consiste en crear pequeños tajadas (slices) para que realicen una tarea en especifico y así poder separar las responsabilidades.
+
+Luego uniremos los slices en un único boundStore que permite aplicar los middlewares.
