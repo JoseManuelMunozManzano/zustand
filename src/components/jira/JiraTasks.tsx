@@ -1,13 +1,11 @@
-import { DragEvent, useState } from 'react';
 import { IoAddOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 
 import classNames from 'classnames';
-import Swal from 'sweetalert2';
 
 import { SingleTask } from './SingleTask';
 
 import type { Task, TaskStatus } from '../../interfaces';
-import { useTaskStore } from '../../stores';
+import { useTasks } from '../../hooks/useTasks';
 
 interface Props {
   title: string;
@@ -16,58 +14,7 @@ interface Props {
 }
 
 export const JiraTasks = ({ title, status, tasks }: Props) => {
-  // Para convertir un valor no booleano a booleano se usa !!
-  const isDragging = useTaskStore((state) => !!state.draggingTaskId);
-
-  // const changeTaskStatus = useTaskStore((state) => state.changeTaskStatus);
-  // const draggingTaskId = useTaskStore((state) => state.draggingTaskId);
-  //
-  // Ya solo me hace falta el método onTaskDrop
-  const onTaskDrop = useTaskStore((state) => state.onTaskDrop);
-  const addTask = useTaskStore((state) => state.addTask);
-
-  const [onDragOver, setOnDragOver] = useState(false);
-
-  const handleAddTask = async () => {
-    //const resp = await Swal.fire({
-    const { isConfirmed, value } = await Swal.fire({
-      title: 'Nueva tarea',
-      input: 'text',
-      inputLabel: 'Nombre de la tarea',
-      inputPlaceholder: 'Ingrese el nombre de la tarea',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        if (!value) {
-          return 'Debe ingresar un nombre para la tarea';
-        }
-      },
-    });
-
-    //console.log(resp);
-
-    if (!isConfirmed) return;
-
-    addTask(value, status);
-  };
-
-  const handleDragOver = (ev: DragEvent<HTMLDivElement>) => {
-    // Se indica preventDefault para que se pueda ejecutar el evento onDrop
-    ev.preventDefault();
-    setOnDragOver(true);
-  };
-
-  const handleDragLeave = (ev: DragEvent<HTMLDivElement>) => {
-    // Se indica preventDefault para que se pueda ejecutar el evento onDrop
-    ev.preventDefault();
-    setOnDragOver(false);
-  };
-
-  const handleDrop = (ev: DragEvent<HTMLDivElement>) => {
-    ev.preventDefault();
-    setOnDragOver(false);
-    //changeTaskStatus(draggingTaskId!, value);
-    onTaskDrop(status);
-  };
+  const { isDragging, handleDragOver, handleDragLeave, handleDrop, onDragOver, handleAddTask } = useTasks({ status });
 
   return (
     <div
