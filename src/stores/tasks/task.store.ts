@@ -36,7 +36,11 @@ interface TaskState {
   onTaskDrop: (status: TaskStatus) => void;
 }
 
-const storeApi: StateCreator<TaskState, [['zustand/immer', never]]> = (set, get) => ({
+const storeApi: StateCreator<
+  TaskState,
+  [['zustand/devtools', never], ['zustand/persist', unknown], ['zustand/immer', never]],
+  []
+> = (set, get) => ({
   draggingTaskId: undefined,
 
   tasks: {
@@ -58,9 +62,13 @@ const storeApi: StateCreator<TaskState, [['zustand/immer', never]]> = (set, get)
     // Es lo mejor cuando el objeto tiene mucho anidamiento interno.
     // Ocurre un error de tipado porque el store lo tenemos por fuera de immer.
     // Para corregirlo
-    set((state) => {
-      state.tasks[newTask.id] = newTask;
-    });
+    set(
+      (state) => {
+        state.tasks[newTask.id] = newTask;
+      },
+      false,
+      'addTask'
+    );
 
     //? Con operador spread. Forma nativa de Zustand
     // set((state) => ({
@@ -81,11 +89,11 @@ const storeApi: StateCreator<TaskState, [['zustand/immer', never]]> = (set, get)
   },
 
   setDraggingTaskId: (taskId: string) => {
-    set({ draggingTaskId: taskId });
+    set({ draggingTaskId: taskId }, false, 'setDragging');
   },
 
   removeDraggingTaskId: () => {
-    set({ draggingTaskId: undefined });
+    set({ draggingTaskId: undefined }, false, 'removeDragging');
   },
 
   changeTaskStatus: (taskId: string, status: TaskStatus) => {
@@ -102,21 +110,25 @@ const storeApi: StateCreator<TaskState, [['zustand/immer', never]]> = (set, get)
     task.status = status;
 
     //? Con el middleware de Immer
-    set((state) => {
-      // Esto da error porque estamos modificando un objeto anidado de un objeto anidado.
-      //state.tasks[taskId] = task;
+    set(
+      (state) => {
+        // Esto da error porque estamos modificando un objeto anidado de un objeto anidado.
+        //state.tasks[taskId] = task;
 
-      // SOLUCION 1
-      // state.tasks[taskId] = {
-      //   ...state.tasks[taskId],
-      //   status,
-      // };
+        // SOLUCION 1
+        // state.tasks[taskId] = {
+        //   ...state.tasks[taskId],
+        //   status,
+        // };
 
-      // SOLUCION 2
-      state.tasks[taskId] = {
-        ...task,
-      };
-    });
+        // SOLUCION 2
+        state.tasks[taskId] = {
+          ...task,
+        };
+      },
+      false,
+      'changeTaskStatus'
+    );
 
     //? Con operador spread. Forma nativa de Zustand
     // set((state) => ({
