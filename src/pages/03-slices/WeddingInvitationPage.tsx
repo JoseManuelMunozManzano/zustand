@@ -1,8 +1,13 @@
 import { WhiteCard } from '../../components';
-
-
+import { useWeddingBoundStore } from '../../stores/wedding';
 
 export const WeddingInvitationPage = () => {
+  const firstName = useWeddingBoundStore((state) => state.firstName);
+  const lastName = useWeddingBoundStore((state) => state.lastName);
+
+  const setFirstName = useWeddingBoundStore((state) => state.setFirstName);
+  const setLastName = useWeddingBoundStore((state) => state.setLastName);
+
   return (
     <>
       <h1>Invitación de Boda</h1>
@@ -15,41 +20,33 @@ export const WeddingInvitationPage = () => {
             <div className="-mx-3 flex flex-wrap">
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
-                  <label
-                    className="mb-3 block text-base font-medium text-[#07074D]"
-                  >
-                    Primer Nombre
-                  </label>
+                  <label className="mb-3 block text-base font-medium text-[#07074D]">Primer Nombre</label>
                   <input
                     type="text"
                     name="firstName"
                     id="firstName"
                     placeholder="Primer Nombre"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
               </div>
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
-                  <label
-                    className="mb-3 block text-base font-medium text-[#07074D]"
-                  >
-                    Apellido
-                  </label>
+                  <label className="mb-3 block text-base font-medium text-[#07074D]">Apellido</label>
                   <input
                     type="text"
                     name="lastName"
                     id="lastName"
                     placeholder="Apellido"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
             </div>
             <div className="mb-5">
-              <label
-                className="mb-3 block text-base font-medium text-[#07074D]"
-              >
-                ¿Cuántos invitados traerá?
-              </label>
+              <label className="mb-3 block text-base font-medium text-[#07074D]">¿Cuántos invitados traerá?</label>
               <input
                 type="number"
                 name="guestNumber"
@@ -63,72 +60,34 @@ export const WeddingInvitationPage = () => {
             <div className="-mx-3 flex flex-wrap">
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
-                  <label
-                    className="mb-3 block text-base font-medium text-[#07074D]"
-                  >
-                    Fecha de evento
-                  </label>
-                  <input
-                    type="date"
-                    name="eventDate"
-                    id="eventDate"
-                  />
+                  <label className="mb-3 block text-base font-medium text-[#07074D]">Fecha de evento</label>
+                  <input type="date" name="eventDate" id="eventDate" />
                 </div>
               </div>
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
-                  <label
-                    className="mb-3 block text-base font-medium text-[#07074D]"
-                  >
-                    Hora del evento
-                  </label>
-                  <input
-                    type="time"
-                    name="eventTime"
-                    id="eventTime"
-                  />
+                  <label className="mb-3 block text-base font-medium text-[#07074D]">Hora del evento</label>
+                  <input type="time" name="eventTime" id="eventTime" />
                 </div>
               </div>
             </div>
 
             <div className="mb-5">
-              <label className="mb-3 block text-base font-medium text-[#07074D]">
-                ¿Tu también vendrás?
-              </label>
+              <label className="mb-3 block text-base font-medium text-[#07074D]">¿Tu también vendrás?</label>
               <div className="flex items-center space-x-6">
                 <div className="flex items-center">
-                  <input
-                    type="radio"
-                    name="isComing"
-                    id="radioButton1"
-                    className="h-5 w-5"
-                  />
-                  <label
-                    className="pl-3 text-base font-medium text-[#07074D]"
-                  >
-                    Si
-                  </label>
+                  <input type="radio" name="isComing" id="radioButton1" className="h-5 w-5" />
+                  <label className="pl-3 text-base font-medium text-[#07074D]">Si</label>
                 </div>
                 <div className="flex items-center">
-                  <input
-                    type="radio"
-                    name="isComing"
-                    id="radioButton2"
-                    className="h-5 w-5"
-                  />
-                  <label
-                    className="pl-3 text-base font-medium text-[#07074D]"
-                  >
-                    No
-                  </label>
+                  <input type="radio" name="isComing" id="radioButton2" className="h-5 w-5" />
+                  <label className="pl-3 text-base font-medium text-[#07074D]">No</label>
                 </div>
               </div>
             </div>
 
             <div>
-              <button>
-                Enviar
-              </button>
+              <button>Enviar</button>
             </div>
           </form>
         </div>
