@@ -65,6 +65,10 @@ Puntualmente veremos:
 
 #### Zustand Slices
 
+`https://docs.pmnd.rs/zustand/guides/slices-pattern`
+
+`https://docs.pmnd.rs/zustand/guides/typescript#slices-pattern`
+
 Esta sección tiene por objetivo que aprendamos el patrón "Slices" de Zustand para poder cortar un Store en pequeñas partes fácilmente mantenibles.
 
 El ejercicio consiste en crear pequeños tajadas (slices) para que realicen una tarea en especifico y así poder separar las responsabilidades.
