@@ -1,11 +1,11 @@
 import { StateCreator, create } from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 
 // Instalado uuid (npm i uuid) y sus tipos (npm i --save-dev @types/uuid)
 import { v4 as uuidv4 } from 'uuid';
 
 // De nuevo, indicamos type para que no importe ningún archivo físico
 import type { Task, TaskStatus } from '../../interfaces';
-import { devtools } from 'zustand/middleware';
 
 // Para usar la función produce de immer, hay que instalarla.
 // npm i immer
@@ -13,7 +13,10 @@ import { devtools } from 'zustand/middleware';
 // haciendo falta el operador spread (donde se use spread podremos usar product)
 // Es más lioso que el middleware de immer, para el que incluso no hace
 // falta instalar nada.
-import { produce } from 'immer';
+//
+// import { produce } from 'immer';
+
+import { immer } from 'zustand/middleware/immer';
 
 // Vamos a juntar propiedades y métodos
 interface TaskState {
@@ -33,7 +36,7 @@ interface TaskState {
   onTaskDrop: (status: TaskStatus) => void;
 }
 
-const storeApi: StateCreator<TaskState> = (set, get) => ({
+const storeApi: StateCreator<TaskState, [['zustand/immer', never]]> = (set, get) => ({
   draggingTaskId: undefined,
 
   tasks: {
@@ -51,7 +54,15 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   addTask: (title: string, status: TaskStatus) => {
     const newTask = { id: uuidv4(), title, status };
 
-    // Con operador spread
+    //? Con el middleware de Immer
+    // Es lo mejor cuando el objeto tiene mucho anidamiento interno.
+    // Ocurre un error de tipado porque el store lo tenemos por fuera de immer.
+    // Para corregirlo
+    set((state) => {
+      state.tasks[newTask.id] = newTask;
+    });
+
+    //? Con operador spread. Forma nativa de Zustand
     // set((state) => ({
     //   tasks: {
     //     // De nuevo tenemos el problema de que se nos puede pasar esto y perderíamos todas las tareas.
@@ -61,12 +72,12 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
     //   },
     // }));
 
-    // Con produce se muta el state
-    set(
-      produce((state: TaskState) => {
-        state.tasks[newTask.id] = newTask;
-      })
-    );
+    //? Con produce se muta el state generando uno nuevo. Requiere instalar un paquete
+    // set(
+    //   produce((state: TaskState) => {
+    //     state.tasks[newTask.id] = newTask;
+    //   })
+    // );
   },
 
   setDraggingTaskId: (taskId: string) => {
@@ -79,19 +90,45 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
 
   changeTaskStatus: (taskId: string, status: TaskStatus) => {
     // Aquí se podría añadir la confirmación de que la tarea existe
-    const task = get().tasks[taskId];
+    // Con la solución immer, esto ni se usa
+    //
+    // SOLUCION 1
+    // Y esto es un objeto inmutable, lo que da problemas.
+    // const task = get().tasks[taskId];
+    // task.status = status;
+
+    // SOLUCION 2
+    const task = { ...get().tasks[taskId] };
     task.status = status;
 
-    set((state) => ({
-      tasks: {
-        // Hago el spread de todas las tareas anteriores y cambio la que quiero.
-        // Tengo que acordarme de hacer esto, porque si no pierdo todas las tareas y
-        // me quedo solo con la que cambio.
-        // Esto se va a hacer mucho más fácil cuando se use Immer.
-        ...state.tasks,
-        [taskId]: task,
-      },
-    }));
+    //? Con el middleware de Immer
+    set((state) => {
+      // Esto da error porque estamos modificando un objeto anidado de un objeto anidado.
+      //state.tasks[taskId] = task;
+
+      // SOLUCION 1
+      // state.tasks[taskId] = {
+      //   ...state.tasks[taskId],
+      //   status,
+      // };
+
+      // SOLUCION 2
+      state.tasks[taskId] = {
+        ...task,
+      };
+    });
+
+    //? Con operador spread. Forma nativa de Zustand
+    // set((state) => ({
+    //   tasks: {
+    //     // Hago el spread de todas las tareas anteriores y cambio la que quiero.
+    //     // Tengo que acordarme de hacer esto, porque si no pierdo todas las tareas y
+    //     // me quedo solo con la que cambio.
+    //     // Esto se va a hacer mucho más fácil cuando se use Immer.
+    //     ...state.tasks,
+    //     [taskId]: task,
+    //   },
+    // }));
   },
 
   onTaskDrop: (status: TaskStatus) => {
@@ -109,5 +146,11 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
 
 export const useTaskStore = create<TaskState>()(
   // Que me ayuden las devtools a saber el valor de mi state
-  devtools(storeApi)
+  devtools(
+    persist(
+      //? Usando el middleware de Immer. No requiere instalaciones
+      immer(storeApi),
+      { name: 'task-store' }
+    )
+  )
 );
