@@ -7,6 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 import type { Task, TaskStatus } from '../../interfaces';
 import { devtools } from 'zustand/middleware';
 
+// Para usar la función produce de immer, hay que instalarla.
+// npm i immer
+// produce proporciona una forma de mutar el estado generando uno nuevo, no
+// haciendo falta el operador spread (donde se use spread podremos usar product)
+// Es más lioso que el middleware de immer, para el que incluso no hace
+// falta instalar nada.
+import { produce } from 'immer';
+
 // Vamos a juntar propiedades y métodos
 interface TaskState {
   draggingTaskId?: string;
@@ -43,14 +51,22 @@ const storeApi: StateCreator<TaskState> = (set, get) => ({
   addTask: (title: string, status: TaskStatus) => {
     const newTask = { id: uuidv4(), title, status };
 
-    set((state) => ({
-      tasks: {
-        // De nuevo tenemos el problema de que se nos puede pasar esto y perderíamos todas las tareas.
-        ...state.tasks,
-        // Llaves cuadradas porque queremos poner la propiedad computada
-        [newTask.id]: newTask,
-      },
-    }));
+    // Con operador spread
+    // set((state) => ({
+    //   tasks: {
+    //     // De nuevo tenemos el problema de que se nos puede pasar esto y perderíamos todas las tareas.
+    //     ...state.tasks,
+    //     // Llaves cuadradas porque queremos poner la propiedad computada
+    //     [newTask.id]: newTask,
+    //   },
+    // }));
+
+    // Con produce se muta el state
+    set(
+      produce((state: TaskState) => {
+        state.tasks[newTask.id] = newTask;
+      })
+    );
   },
 
   setDraggingTaskId: (taskId: string) => {

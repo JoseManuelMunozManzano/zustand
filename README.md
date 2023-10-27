@@ -50,6 +50,8 @@ En esta sección vamos a trabajar con middlewares o funciones adicionales que ex
 
 `https://www.npmjs.com/package/classnames`
 
+`https://docs.pmnd.rs/zustand/guides/updating-state#with-immer`
+
 En esta sección aprenderemos a trabajar con objetos anidados dentro de nuestro store, con el objetivo de apreciar claramente el beneficio de utilizar la función produce() o, mejor aún, el middleware immer, para poder mutar el estado y generar uno nuevo basado en esa mutación.
 Puntualmente veremos:
 
