@@ -16,6 +16,7 @@ export const WeddingInvitationPage = () => {
   const eventHHMM = useWeddingBoundStore((state) => state.eventHHMM());
 
   const setEventDate = useWeddingBoundStore((state) => state.setEventDate);
+  const setEventTime = useWeddingBoundStore((state) => state.setEventTime);
 
   return (
     <>
@@ -84,7 +85,13 @@ export const WeddingInvitationPage = () => {
               <div className="w-full px-3 sm:w-1/2">
                 <div className="mb-5">
                   <label className="mb-3 block text-base font-medium text-[#07074D]">Hora del evento</label>
-                  <input type="time" name="eventTime" id="eventTime" value={eventHHMM} />
+                  <input
+                    type="time"
+                    name="eventTime"
+                    id="eventTime"
+                    value={eventHHMM}
+                    onChange={(e) => setEventTime(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
