@@ -1,8 +1,9 @@
 import { create } from 'zustand';
-import { type PersonSlice, createPersonSlice } from './person.slice';
 import { devtools } from 'zustand/middleware';
+import { type PersonSlice, createPersonSlice } from './person.slice';
+import { type GuestSlice, createGuestSlice } from './guest.slice';
 
-type ShareState = PersonSlice;
+type ShareState = PersonSlice & GuestSlice;
 
 // El store es la combinación de todos los slices
 export const useWeddingBoundStore = create<ShareState>()(
@@ -11,6 +12,7 @@ export const useWeddingBoundStore = create<ShareState>()(
     // para poderlo esparcir fácilmente usando el operador spread
     (...a) => ({
       ...createPersonSlice(...a),
+      ...createGuestSlice(...a),
     })
   )
 );
