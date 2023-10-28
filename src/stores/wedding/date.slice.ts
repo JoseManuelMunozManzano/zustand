@@ -8,6 +8,9 @@ export interface DateSlice {
 
   eventYYYYMMDD: () => string;
   eventHHMM: () => string;
+
+  // Como los input html son string, recibimos como string
+  setEventDate: (parcialDate: string) => void;
 }
 
 export const createDateSlice: StateCreator<DateSlice, [['zustand/devtools', never]]> = (set, get) => ({
@@ -27,4 +30,22 @@ export const createDateSlice: StateCreator<DateSlice, [['zustand/devtools', neve
 
     return `${hours}:${minutes}`;
   },
+
+  setEventDate: (parcialDate: string) =>
+    set((state) => {
+      const date = new Date(parcialDate);
+
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const day = date.getDate();
+
+      // Asignamos a una nueva variable porque necesitamos mutarlo y
+      // notificar los cambios.
+      // Haciendo solo el cambio en state.eventDate solo mutaría sin
+      // notificar cambios.
+      const newDate = new Date(state.eventDate);
+      newDate.setFullYear(year, month, day);
+
+      return { eventDate: newDate };
+    }),
 });
