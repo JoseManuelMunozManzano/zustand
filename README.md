@@ -74,3 +74,9 @@ Esta sección tiene por objetivo que aprendamos el patrón "Slices" de Zustand p
 El ejercicio consiste en crear pequeños tajadas (slices) para que realicen una tarea en especifico y así poder separar las responsabilidades.
 
 Luego uniremos los slices en un único boundStore que permite aplicar los middlewares.
+
+#### Peticiones HTTP - Zustand fuera de React
+
+El objetivo principal de la sección es poder utilizar Zustand para manejar el estado de nuestra autenticación basada en JWTs.
+
+También aprenderemos a utilizar Zustand fuera del contexto de React, que a mi parecer es uno de los puntos fuertes que tiene sobre otros gestores de estado para React.
