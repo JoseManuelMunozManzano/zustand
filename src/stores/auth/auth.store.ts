@@ -16,6 +16,8 @@ export interface AuthState {
 
   // Para saber si estamos autenticados
   checkAuthStatus: () => Promise<void>;
+
+  logoutUser: () => void;
 }
 
 // Se indica el paréntesis antes que la llave porque es un return implícito de un objeto.
@@ -46,6 +48,10 @@ const storeApi: StateCreator<AuthState> = (set) => ({
     } catch (error) {
       set({ status: 'unauthorized', token: undefined, user: undefined });
     }
+  },
+
+  logoutUser: () => {
+    set({ status: 'unauthorized', token: undefined, user: undefined });
   },
 });
 
