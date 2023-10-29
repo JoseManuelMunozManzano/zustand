@@ -28,6 +28,7 @@ const menuItems: MenuItem[] = [
 
 export const SideMenu = () => {
   const logoutUser = useAuthStore((state) => state.logoutUser);
+  const username = useAuthStore((state) => state.user?.fullName || 'No User');
 
   return (
     <div id="menu" className="bg-gray-900 min-h-screen z-10 text-slate-300 w-80 left-0 overflow-y-scroll">
@@ -51,7 +52,7 @@ export const SideMenu = () => {
               alt=""
             />
           </span>
-          <span className="text-sm md:text-base font-bold">Edward Tompson</span>
+          <span className="text-sm md:text-base font-bold">{username}</span>
         </a>
       </div>
 
