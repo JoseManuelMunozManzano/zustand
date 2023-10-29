@@ -114,6 +114,36 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Private",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImYxMWIwMjI5LWQ2MWEtNGZiMS05NmUyLTliYWI5ODExMWY4YiIsImlhdCI6MTY5ODU2NzMzOSwiZXhwIjoxNjk4NTc0NTM5fQ.KvCWnQtwMyqJZl9IvLTZODPS9Hu4oGJh7lt-zw1s3eE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/auth/private",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"private"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
