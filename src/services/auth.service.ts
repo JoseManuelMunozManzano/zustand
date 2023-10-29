@@ -36,4 +36,16 @@ export class AuthService {
       throw new Error('Unable to login');
     }
   };
+
+  static checkStatus = async (): Promise<LoginResponse> => {
+    try {
+      // Aquí deberíamos indicar el token, dentro del header, pero eso lo vamos
+      // a hacer con interceptores, para poder usar esto fuera del contexto de React.
+      const { data } = await tesloApi.get<LoginResponse>('/auth/check-status');
+      return data;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Unauthorized');
+    }
+  };
 }

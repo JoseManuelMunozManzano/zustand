@@ -72,6 +72,48 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Check Status",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZjYTdmYTQ2LTE2ZjEtNGI5MS05YTRjLTFhYjFiYzQwMWFlNyIsImlhdCI6MTY5ODU1NjM0MSwiZXhwIjoxNjk4NTYzNTQxfQ.CfK6R7U9V_FqEQIQXkJ7Srpso84cO2j3N4WApdas3Z8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test1@google.com\",\n    \"password\": \"Abc123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/auth/check-status",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"auth",
+						"check-status"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
