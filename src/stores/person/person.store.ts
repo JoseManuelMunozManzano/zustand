@@ -2,6 +2,7 @@
 // solo lo vamos a usar como una interface para TypeScript.
 import { type StateCreator, create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
+import { useWeddingBoundStore } from '../wedding';
 
 //import { logger } from '../middlewares/logger.middleware';
 
@@ -75,3 +76,21 @@ export const usePersonStore = create<PersonState & Actions>()(
   )
   // )
 );
+
+// Pasar información de un store a otro.
+// subscribe emite dos cosas: el nextState y el previousState
+// Esta subscripción va a emitir cualquier cambio que suceda en este estado, teniendo
+// acceso total al nuevo estado y al anterior.
+// Para actualizar useWeddingBoundStore con esta información, tomamos el state de
+// useWeddingBoundStore y podemos llamar a sus métodos.
+//
+// Hay que tener cuidado de no hacer una dependencia cíclica. Esto es, en el otro store
+// hacer que cuando cambie firstName y lastName, actualizar este store.
+usePersonStore.subscribe((nextState /* prevState */) => {
+  // console.log({ nextState, prevState });
+
+  const { firstName, lastName } = nextState;
+
+  useWeddingBoundStore.getState().setFirstName(firstName);
+  useWeddingBoundStore.getState().setLastName(lastName);
+});
