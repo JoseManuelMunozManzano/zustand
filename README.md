@@ -80,3 +80,27 @@ Luego uniremos los slices en un único boundStore que permite aplicar los middle
 El objetivo principal de la sección es poder utilizar Zustand para manejar el estado de nuestra autenticación basada en JWTs.
 
 También aprenderemos a utilizar Zustand fuera del contexto de React, que a mi parecer es uno de los puntos fuertes que tiene sobre otros gestores de estado para React.
+
+- El backend lo cargamos con Docker. Ya tiene rutas preestablecidas y trabaja con JWT: `https://hub.docker.com/r/klerith/teslo-shop-cors`
+
+  De ese repositorio cogemos el fichero .env y docker-compose.yml
+
+  Hay dos usuarios como SEED:
+
+  ```
+  {
+    "email": "test1@google.com",
+    "password": "Abc123"
+  }
+
+  {
+    "email": "test2@google.com",
+    "password": "Abc123"
+  }
+  ```
+
+  Pero se puede cargar la BD con más datos con este API Endpoint usando Postman: `http://localhost:3000/api/seed`
+
+  Y en el navegador, podemos acceder a la documentación de los endpoints: `http://localhost:3000/api`
+
+  Para echar a andar el backend en Docker, ir a la carpeta de nuestro proyecto zustand-dashboard, y ejecutar: `docker compose up -d`
