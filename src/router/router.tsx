@@ -4,8 +4,7 @@ import { Root } from '../Root';
 import { AuthLayout, DashboardLayout } from '../layouts';
 import { BearPage, Dashboard, JiraPage, LoginPage, PersonPage, WeddingInvitationPage } from '../pages';
 
-
-export const router = createBrowserRouter( [
+export const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
@@ -13,30 +12,30 @@ export const router = createBrowserRouter( [
       /// Dashboard Routes
       {
         path: 'dashboard',
+        // Todas las rutas pasan por el Dashboard
         element: <DashboardLayout />,
         children: [
           {
             path: '',
-            element: <Dashboard />
+            element: <Dashboard />,
           },
           {
             path: 'bears',
-            element: <BearPage />
+            element: <BearPage />,
           },
           {
             path: 'person',
-            element: <PersonPage />
+            element: <PersonPage />,
           },
           {
             path: 'tasks',
-            element: <JiraPage />
+            element: <JiraPage />,
           },
           {
             path: 'wedding-invitation',
-            element: <WeddingInvitationPage />
-          }
-
-        ]
+            element: <WeddingInvitationPage />,
+          },
+        ],
       },
 
       /// Auth Routes
@@ -46,12 +45,10 @@ export const router = createBrowserRouter( [
         children: [
           {
             path: 'login',
-            element: <LoginPage />
-          }
-        ]
-
+            element: <LoginPage />,
+          },
+        ],
       },
-
     ],
   },
-] );
+]);

@@ -13,11 +13,15 @@ export interface AuthState {
 
   // No recibimos el parámetro Rememberme porque no lo vamos a usar.
   loginUser: (email: string, password: string) => Promise<void>;
+
+  // Para saber si estamos autenticados
+  checkAuthStatus: () => Promise<void>;
 }
 
 // Se indica el paréntesis antes que la llave porque es un return implícito de un objeto.
 const storeApi: StateCreator<AuthState> = (set) => ({
-  status: 'unauthorized',
+  // Todavía no sé si estoy o no autenticado.
+  status: 'pending',
 
   // Como son optativas, no haría falta definirlas, pero indicando undefined es más
   // fácil de leer.
@@ -31,6 +35,16 @@ const storeApi: StateCreator<AuthState> = (set) => ({
       set({ status: 'authorized', token, user });
     } catch (error) {
       set({ status: 'unauthorized', token: undefined, user: undefined }); // Igual a un logout
+      throw 'Unauthorized';
+    }
+  },
+
+  checkAuthStatus: async (): Promise<void> => {
+    try {
+      const { token, ...user } = await AuthService.checkStatus();
+      set({ status: 'authorized', token, user });
+    } catch (error) {
+      set({ status: 'unauthorized', token: undefined, user: undefined });
     }
   },
 });

@@ -1,10 +1,15 @@
 import { FormEvent } from 'react';
 import { useAuthStore } from '../../stores';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
+  // Navegación desde la página de Login a Dashboard si se hace login correcto.
+  // Usamos un hook.
+  const navigate = useNavigate();
+
   const loginUser = useAuthStore((state) => state.loginUser);
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Esta es la forma sencilla, pero todo queda como tipo any
     // const { email, password, remember } = event.target as HTMLFormElement;
@@ -17,7 +22,16 @@ export const LoginPage = () => {
     };
     console.log(email.value, password.value, remember.checked);
 
-    loginUser(email.value, password.value);
+    // loginUser regresa void. Para saber si el login ha ido bien hay varias maneras.
+    // 1. Usar el .then() y el .catch() de las Promises o async await.
+    // 2. En nuestro store se hace el set a propiedades con las que sabemos como ha ido el login.
+    // Usaremos la opción 1 con async await
+    try {
+      await loginUser(email.value, password.value);
+      navigate('/dashboard');
+    } catch (error) {
+      console.log('No se pudo autenticar');
+    }
 
     // Comentado para no perder la información del login, para evitar tener que estar
     // informándolo una y otra vez.
